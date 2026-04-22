@@ -24,5 +24,25 @@ pipeline {
                 '''
             }
         }
+
+        stage('Health check') {
+            steps {
+                sh '''
+                echo "Waiting for service..."
+
+                sleep 3
+                CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8081)
+
+                echo "HTTP code: $CODE"
+
+                if [ "$CODE" -ne 200 ]; then
+                    echo "Service is DOWN"
+                    exit 1
+                fi
+
+                echo "Service is UP"
+                '''
+            }
+        }
     }
 }
