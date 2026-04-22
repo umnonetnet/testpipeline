@@ -20,7 +20,7 @@ pipeline {
                 sh '''
                 docker stop hello-container || true
                 docker rm hello-container || true
-                docker run -d --name hello-container -p 8081:80 hello-app
+                #docker run -d --name hello-container -p 8081:80 hello-app
                 '''
             }
         }
