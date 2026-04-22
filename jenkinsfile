@@ -1,0 +1,28 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Check') {
+            steps {
+                sh 'grep Hello index.html'
+            }
+        }
+
+        stage('Build Docker') {
+            steps {
+                sh 'docker build -t hello-app .'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh '''
+                docker stop hello-container || true
+                docker rm hello-container || true
+                docker run -d --name hello-container -p 80:80 hello-app
+                '''
+            }
+        }
+    }
+}
